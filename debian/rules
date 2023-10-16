@@ -1,4 +1,26 @@
 #!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+include /usr/share/dpkg/pkg-info.mk
+
+pdkms:=ryzen-smu-dkms
+sname:=ryzen_smu
 
 %:
 	dh $@
+
+override_dh_auto_clean:
+	@echo CLEAN
+
+override_dh_auto_build:
+	make -C userspace
+
+override_dh_auto_install:
+	@echo NO AUTO INSTALL
+
+override_dh_dkms:
+	dh_install Makefile *.c *.h LICENSE usr/src/$(sname)-$(DEB_VERSION)
+	dh_install userspace/monitor_cpu usr/bin
+	chmod 0644 debian/$(pdkms)/usr/src/$(sname)-$(DEB_VERSION)/*
+	chmod 0700 debian/$(pdkms)/usr/bin/monitor_cpu
+	dh_dkms -V $(DEB_VERSION)

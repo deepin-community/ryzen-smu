@@ -1,0 +1,7 @@
+*.o
+Module.symvers
+*.ko
+.*.cmd
+ryzen_smu.mod
+ryzen_smu.mod.c
+modules.order
